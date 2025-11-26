@@ -79,6 +79,31 @@ if (method === "calculate") {
   });
 }
 
+    // Tool: triggerWebhook
+if (method === "triggerWebhook") {
+  const webhookUrl = "https://pixelkraftwerk.app.n8n.cloud/webhook-test/mcp-webhook";
+
+  const payload = params?.payload || {};
+
+  const response = await fetch(webhookUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(payload)
+  });
+
+  const data = await response.json().catch(() => null);
+
+  return res.json({
+    result: {
+      status: response.status,
+      responseFromN8n: data
+    }
+  });
+}
+
+
     // Fallback wenn Methode nicht existiert
     return res.json({
       error: {
