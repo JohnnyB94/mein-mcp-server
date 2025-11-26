@@ -2,7 +2,7 @@ app.post("/mcp", async (req, res) => {
   try {
     const { method, params } = req.body;
 
-    if (method === "IchTesteWas") {
+    if (method === "sayHello") {
       const name = params?.name || "Unbekannt";
       return res.json({
         result: {
