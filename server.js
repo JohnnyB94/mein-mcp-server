@@ -4,6 +4,16 @@ const app = express();
 app.use(express.json());
 
 // ===============================
+// CORS & HEADER SUPPORT
+// ===============================
+
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Accept");
+  next();
+});
+
+// ===============================
 // TOOL DEFINITIONEN
 // ===============================
 
@@ -46,7 +56,7 @@ const tools = [
 ];
 
 // ===============================
-// MCP TOOL DISCOVERY (für AI Agent)
+// MCP TOOL DISCOVERY (AI AGENT)
 // ===============================
 
 app.get("/mcp/tools", (req, res) => {
@@ -64,30 +74,34 @@ app.get("/mcp/tools", (req, res) => {
 // ===============================
 
 app.post("/mcp", async (req, res) => {
-  res.setHeader("Content-Type", "application/json");
+
+  // Wichtige Header für n8n MCP + Streamable
+  res.setHeader("Content-Type", "application/json; charset=utf-8");
   res.setHeader("Transfer-Encoding", "chunked");
+  res.setHeader("Cache-Control", "no-cache");
+  res.setHeader("Connection", "keep-alive");
 
   const { tool, arguments: args } = req.body || {};
   let result = null;
 
-  // 🔹 sayHello
+  // ✅ sayHello
   if (tool === "sayHello") {
     result = {
-      message: `Hallo ${args?.name || "Unbekannt"}! 👋`
+      message: `Hallo ${args?.name || "Unbekannt"} 👋`
     };
   }
 
-  // 🔹 getServerTime
+  // ✅ getServerTime
   if (tool === "getServerTime") {
     const now = new Date();
     result = {
       iso: now.toISOString(),
-      readable: now.toLocaleString(),
+      local: now.toLocaleString(),
       timestamp: now.getTime()
     };
   }
 
-  // 🔹 calculate
+  // ✅ calculate
   if (tool === "calculate") {
     const { a, b, op } = args || {};
 
@@ -109,10 +123,9 @@ app.post("/mcp", async (req, res) => {
     }
   }
 
-  // Fallback falls Tool nicht existiert
   if (!result) {
     result = {
-      error: "Unbekanntes Tool oder fehlende Parameter"
+      error: "Unbekanntes Tool oder ungültige Parameter"
     };
   }
 
