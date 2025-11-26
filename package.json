@@ -1,12 +1,12 @@
 {
-  "name": "mein-mcp-server",
-  "version": "1.0.0",
-  "type": "module",
-  "scripts": {
-    "start": "node server.js"
-  },
-  "dependencies": {
-    "express": "^4.18.2",
-    "@modelcontextprotocol/sdk": "^0.4.0"
-  }
+"name": "mein-mcp-server",
+"version": "1.0.0",
+"type": "module",
+"scripts": {
+"start": "node server.js"
+},
+"dependencies": {
+"express": "^4.18.2",
+"@modelcontextprotocol/sdk": "^1.0.0"
+}
 }
