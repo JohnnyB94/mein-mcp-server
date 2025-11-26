@@ -44,6 +44,41 @@ app.post("/mcp", async (req, res) => {
       });
     }
 
+    // Tool: calculate (Taschenrechner)
+if (method === "calculate") {
+  const { a, b, op } = params || {};
+
+  let result;
+
+  switch (op) {
+    case "add":
+      result = a + b;
+      break;
+    case "sub":
+      result = a - b;
+      break;
+    case "mul":
+      result = a * b;
+      break;
+    case "div":
+      result = b !== 0 ? a / b : "Division durch 0 nicht erlaubt";
+      break;
+    default:
+      return res.json({
+        error: { message: "Unbekannte Operation" }
+      });
+  }
+
+  return res.json({
+    result: {
+      a,
+      b,
+      operation: op,
+      result
+    }
+  });
+}
+
     // Fallback wenn Methode nicht existiert
     return res.json({
       error: {
