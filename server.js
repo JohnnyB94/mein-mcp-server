@@ -1,14 +1,8 @@
-import express from "express";
-
-const app = express();
-app.use(express.json());
-
-// MCP-kompatibler Endpoint
 app.post("/mcp", async (req, res) => {
   try {
     const { method, params } = req.body;
 
-    if (method === "sayHello") {
+    if (method === "IchTesteWas") {
       const name = params?.name || "Unbekannt";
       return res.json({
         result: {
@@ -17,6 +11,19 @@ app.post("/mcp", async (req, res) => {
       });
     }
 
+    if (method === "reverseText") {
+      const text = params?.text || "";
+      const reversed = text.split("").reverse().join("");
+
+      return res.json({
+        result: {
+          original: text,
+          reversed
+        }
+      });
+    }
+
+    // Fallback
     res.json({
       error: {
         code: -32601,
@@ -27,9 +34,4 @@ app.post("/mcp", async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
-});
-
-const PORT = process.env.PORT || 3333;
-app.listen(PORT, () => {
-  console.log(`✅ MCP Server läuft auf Port ${PORT}`);
 });
